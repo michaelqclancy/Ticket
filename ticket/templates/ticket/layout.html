@@ -1,0 +1,116 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Help Desk Console</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<link rel="stylesheet" href="{% static 'ticket/styles.css' %}">
+		{% block script %}
+		{% endblock %}
+	</head>
+	<body style="background-color: #e3f2fd;">
+		
+		<header class="navbar navbar-expand navbar-dark bg-dark flex-column flex-md-row bd-navbar">
+			<a class="navbar-brand mb-0 h1" href="#">Help Desk</a>
+			
+            <ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+                    <a id="nav-dashboard" class="nav-link" href="#" onclick="load_sidebar_dashboard()">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a id="nav-tickets" class="nav-link" href="#" onclick="load_sidebar_contacts()">Contacts</a>
+                </li>
+                <li class="nav-item">
+                    <a id="nav-tickets" class="nav-link" href="#" onclick="load_sidebar_tickets()">Tickets</a>
+                </li>
+				{% if user.is_staff %}
+					<li class="nav-item">
+						<a id="nav-admin" class="nav-link" href="#" onclick="load_sidebar_admin()">Management</a>
+					</li>
+				{% endif %}
+				<li class="nav-item">
+                    <a id="nav-user" class="nav-link" href="#" onclick="load_sidebar_user()">{{ user }}</a>
+				</li>
+			</ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input id="search-bar-nav" class="form-control mr-sm-2" type="search" placeholder="Search Tickets" aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit" onclick="load_console_search()">Search</button>
+            </form>
+		</header>
+		<div class="row" style="height: 100vh;">
+			<div class="sidebar col-lg-2 col-md-3" style="background-color: #e3f2fd;">
+				<div style="padding-left: 16px; padding-right: 16px;">
+					<div style="height: 50px;">
+					</div>
+					<h4 id="sidebar-title"></h4><br>
+
+					<div id="sidebar-dashboard" style="display: none">
+						<button type="button" class="btn btn-primary" onclick="load_console_announcement_create()">Create Announcement</button><br><br>
+						<div>
+							<a id="sidebar-tickets-unassigned" href="#" onclick="load_console_dashboard()">Dashboard</a>
+						</div>
+						<br>
+                    </div>
+                    
+                    <div id="sidebar-contacts" style="display: none">
+						<button type="button" class="btn btn-primary" onclick="load_console_contact_create()">Create Contact</button><br><br>
+						<div>
+							<a id="sidebar-tickets-unassigned" href="#" onclick="load_console_contacts_search()">Search Contacts</a>
+						</div>
+						<br>
+					</div>
+
+					<div id="sidebar-tickets" style="display: none">
+						<button type="button" class="btn btn-primary" onclick="load_console_ticket_create()">Create Ticket</button><br><br>
+						<div>
+							<a id="sidebar-tickets-unassigned" href="#" onclick="load_console_tickets_user('{{ user.id }}')">My Open Tickets</a>
+						</div>
+						<hr>
+						<div>
+							<a id="sidebar-tickets-unassigned" href="#" onclick="load_console_tickets_unassigned()">Unassigned Tickets</a>
+						</div>
+						<hr>
+						<div>
+							<a id="sidebar-tickets-unassigned" href="#" onclick="load_console_tickets_open()">All Open Tickets</a>
+						</div>
+						<hr>
+						<div>
+							<a id="sidebar-tickets-unassigned" href="#" onclick="load_console_tickets_all()">Recent Tickets</a>
+						</div>
+						<br>
+					</div>
+
+					<div id="sidebar-user" style="display: none">
+						<a class="btn btn-primary" href="{% url 'logout' %}">Log Out</a><br><br>
+						<div>
+							<a id="sidebar-tickets-unassigned" href="#" onclick="load_console_user_display({{ request.user.id }})">Profile</a>
+						</div>
+						<hr>
+						<div>
+							<a id="sidebar-tickets-unassigned" href="#" onclick="load_console_user_password()">Change Password</a>
+						</div>
+						<br>
+					</div>
+
+					<div id="sidebar-admin" style="display: none">
+						<button type="button" class="btn btn-primary" onclick="load_console_user_create()">Create User</button><br><br>
+						<div>
+							<a id="sidebar-tickets-unassigned" href="#" onclick="load_console_users()">User Accounts</a>
+						</div>
+						<hr>
+						<div>
+							<a id="sidebar-tickets-unassigned" href="{% url 'admin:index' %}">Admin Console</a>
+						</div>
+						<br>
+					</div>
+
+				</div>
+			</div>
+			<div id="console-view" class="main col-lg-10 col-md-9" style="padding: 0px; background-color: white;">
+				{% block body %}
+				{% endblock %}
+			</div>
+		</div>
+	</body>
+</html>
